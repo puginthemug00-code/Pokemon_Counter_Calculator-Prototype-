@@ -5,6 +5,7 @@
 // --- state ---
 // This is the "state" of our app - the current selected attacking and defending types.
 
+let selected = []; // allows up to two name strings for type
 
 
 // --- implement buttons for each type ---
