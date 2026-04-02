@@ -45,7 +45,32 @@ ALL_TYPES.forEach(function(typeName) {
 
 // --- calculations for type effectiveness ---
 // pure functions that dont directly touch html
+function getMultiplier(attackerType, defenderType) {
+  var chart = EFFECTIVENESS[attackerType] || {};
+  return chart[defenderType] !== undefined ? chart[defenderType] : 1;
+}
 
+// given the defender's types, calculate which attacking types fall into each effectiveness category
+function calcDefense(defenderTypes) {
+  var groups = { 0: [], 0.25: [], 0.5: [], 1: [], 2: [], 4: [] };
+ 
+  ALL_TYPES.forEach(function(attacker) {
+    // For dual-type defenders, multiply both values together
+    // Ex: Ground hits Fire/Flying: 1x * 0x = 0x (immune due to Flying)
+    var total = 1;
+    defenderTypes.forEach(function(defender) {
+      total *= getMultiplier(attacker, defender);
+    });
+ 
+    if (groups[total] !== undefined) {
+      groups[total].push(attacker);
+    } else {
+      groups[1].push(attacker); // unexpected value — treat as normal
+    }
+  });
+ 
+  return groups;
+}
 
 
 
