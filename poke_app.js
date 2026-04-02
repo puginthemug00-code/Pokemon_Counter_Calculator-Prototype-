@@ -52,6 +52,26 @@ function getMultiplier(attackerType, defenderType) {
   return chart[defenderType] !== undefined ? chart[defenderType] : 1;
 }
 
+// given the attacker's types, calculate which defending types fall into each effectiveness category
+function calcOffense(attackerTypes) {
+  var groups = { 0: [], 0.25: [], 0.5: [], 1: [], 2: [], 4: [] };
+
+  ALL_TYPES.forEach(function(defender) {
+    var total = 1;
+    attackerTypes.forEach(function(attacker) {
+      total *= getMultiplier(attacker, defender);
+    });
+
+    if (groups[total] !== undefined) {
+      groups[total].push(defender);
+    } else {
+      groups[1].push(defender);
+    }
+  });
+
+  return groups;
+}
+
 // given the defender's types, calculate which attacking types fall into each effectiveness category
 function calcDefense(defenderTypes) {
   var groups = { 0: [], 0.25: [], 0.5: [], 1: [], 2: [], 4: [] };
