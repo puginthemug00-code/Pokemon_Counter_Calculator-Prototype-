@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Pokémon Type Calculator</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+ 
+    body {
+      font-family: sans-serif;
+      background: #1a1a2e;
+      color: #e0e0e0;
+      min-height: 100vh;
+      padding: 2rem 1rem;
+    }
+ 
+    h1 {
+      text-align: center;
+      font-size: 1.8rem;
+      margin-bottom: 0.25rem;
+      color: #fff;
+    }
+ 
+    .subtitle {
+      text-align: center;
+      font-size: 0.9rem;
+      color: #888;
+      margin-bottom: 2rem;
+    }
+ 
+    /* The grid of type buttons — app.js fills this in */
+    #type-grid {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      justify-content: center;
+      max-width: 700px;
+      margin: 0 auto 1.5rem;
+    }
+ 
+    .type-btn {
+      padding: 6px 14px;
+      border-radius: 20px;
+      border: 2px solid transparent;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      text-transform: capitalize;
+      transition: transform 0.1s;
+    }
+ 
+    .type-btn:hover { transform: scale(1.08); }
+ 
+    /* app.js adds/removes this class when a type is clicked */
+    .type-btn.selected {
+      border-color: #fff;
+      box-shadow: 0 0 0 3px rgba(255,255,255,0.25);
+    }
+ 
+    /* The results panel — app.js fills this in */
+    #results {
+      max-width: 700px;
+      margin: 0 auto;
+      background: #16213e;
+      border: 1px solid #2a2a4a;
+      border-radius: 12px;
+      padding: 1.5rem;
+      min-height: 120px;
+    }
+ 
+    .placeholder-text {
+      color: #555;
+      font-size: 14px;
+      text-align: center;
+      padding: 2rem 0;
+    }
+ 
+    .eff-group { margin-bottom: 1.2rem; }
+ 
+    .eff-group-label {
+      font-size: 11px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: #666;
+      margin-bottom: 8px;
+    }
+ 
+    .type-badge {
+      display: inline-block;
+      padding: 4px 10px;
+      border-radius: 12px;
+      font-size: 13px;
+      font-weight: 600;
+      margin: 3px;
+      text-transform: capitalize;
+    }
+  </style>
+</head>
+<body>
+ 
+  <h1>Pokémon Type Calculator</h1>
+  <p class="subtitle">Click a type to see its matchups. Click a second type for dual-type.</p>
+ 
+  <!-- app.js will inject type buttons into this div -->
+  <div id="type-grid"></div>
+ 
+  <!-- app.js will inject results into this div -->
+  <div id="results">
+    <p class="placeholder-text">Select a type above to see matchups.</p>
+  </div>
+ 
+  <!--
+    Scripts go at the BOTTOM of body — this guarantees the divs
+    above already exist before app.js tries to find them.
+    Load order matters: types.js first, then app.js.
+  -->
+  <script src="poke_type.js"></script>
+  <script src="poke_app.js"></script>
+ 
+</body>
+</html>

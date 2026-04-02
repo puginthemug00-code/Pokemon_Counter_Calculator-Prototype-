@@ -10,16 +10,18 @@ let selected = []; // allows up to two name strings for type
 
 // --- implement buttons for each type ---
 // when a button is clicked, update the state and recalculate the effectiveness
-const typeGrid = document.getElementById('.type-grid');
+const typeGrid = document.getElementById('type-grid');
 ALL_TYPES.forEach(function(typeName) {
     const button = document.createElement('button');
-    button.classname = 'type-btn';
+    button.className = 'type-btn';
     button.innerText = typeName;
     button.style.backgroundColor = TYPE_COLORS[typeName];
 
     //collors the button using the types colors from poke_type.js
     const color = TYPE_COLORS[typeName];
     button.style.backgroundColor = color + '33'; // add transparency for better text visibility (33 = 20% opacity)
+    button.className = 'type-btn';
+    button.dataset.type = typeName;
     button.style.borderColor = color + '77'; // add a border with the solid color for better visibility
     button.style.color = color;
 
