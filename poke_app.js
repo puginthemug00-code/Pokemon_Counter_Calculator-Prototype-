@@ -10,8 +10,38 @@ let selected = []; // allows up to two name strings for type
 
 // --- implement buttons for each type ---
 // when a button is clicked, update the state and recalculate the effectiveness
+const typeGrid = document.getElementById('.type-grid');
+ALL_TYPES.forEach(function(typeName) {
+    const button = document.createElement('button');
+    button.classname = 'type-btn';
+    button.innerText = typeName;
+    button.style.backgroundColor = TYPE_COLORS[typeName];
 
+    //collors the button using the types colors from poke_type.js
+    const color = TYPE_COLORS[typeName];
+    button.style.backgroundColor = color + '33'; // add transparency for better text visibility (33 = 20% opacity)
+    button.style.borderColor = color + '77'; // add a border with the solid color for better visibility
+    button.style.color = color;
 
+    button.addEventListener('click', function() {
+        // toggle the type in the selected array
+        if (selected.includes(typeName)) {
+            // if already selected, deselect it
+            selected = selected.filter(t => t !== typeName);
+            button.classList.remove('selected');
+        } else if (selected.length < 2) {
+            // if not selected and we have room, select it
+            selected.push(typeName);
+            button.classList.add('selected');
+        } else {
+            // if we already have 2 selected, replace the first one
+            selected = [selected[1], typeName];
+        }
+        refreshButtons();
+        renderResults();
+    });
+    typeGrid.appendChild(button);
+});
 
 // --- calculations for type effectiveness ---
 // pure functions that dont directly touch html
