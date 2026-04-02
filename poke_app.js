@@ -77,4 +77,70 @@ function calcDefense(defenderTypes) {
 // --- Rendering the page ---
 // update the page to show results 
 
+// Adds/removes the .selected CSS class on each type button
+function refreshButtons() {
+  document.querySelectorAll('.type-btn').forEach(function(btn) {
+    btn.classList.toggle('selected', selected.includes(btn.dataset.type));
+  });
+}
 
+// Creates one colored type badge element
+function makeBadge(typeName) {
+  var color = TYPE_COLORS[typeName];
+  var span = document.createElement('span');
+  span.className = 'type-badge';
+  span.textContent = typeName;
+  span.style.backgroundColor = color + '33';
+  span.style.color = color;
+  span.style.border = '1px solid ' + color + '88';
+  return span;
+}
+
+// Creates a labeled group of badges (e.g. "Weak to — 2×" + badges)
+// Returns null if the type list is empty so we skip rendering it
+function makeGroup(labelText, typeList) {
+  if (typeList.length === 0) return null;
+ 
+  var div = document.createElement('div');
+  div.className = 'eff-group';
+ 
+  var p = document.createElement('p');
+  p.className = 'eff-group-label';
+  p.textContent = labelText;
+  div.appendChild(p);
+ 
+  typeList.forEach(function(t) { div.appendChild(makeBadge(t)); });
+ 
+  return div;
+}
+
+// Clears and rebuilds the results panel based on the current selection
+function renderResults() {
+  var panel = document.getElementById('results');
+  panel.innerHTML = '';
+ 
+  if (selected.length === 0) {
+    panel.innerHTML = '<p class="placeholder-text">Select a type above to see matchups.</p>';
+    return;
+  }
+ 
+  var groups = calcDefense(selected);
+ 
+  var sections = [
+    { mult: 0,    label: 'Immune to — 0×' },
+    { mult: 0.25, label: 'Resists strongly — ¼×' },
+    { mult: 0.5,  label: 'Resists — ½×' },
+    { mult: 2,    label: 'Weak to — 2×' },
+    { mult: 4,    label: 'Very weak to — 4×' },
+  ];
+ 
+  var hasContent = false;
+  sections.forEach(function(s) {
+    var el = makeGroup(s.label, groups[s.mult]);
+    if (el) { panel.appendChild(el); hasContent = true; }
+  });
+ 
+  if (!hasContent) {
+    panel.innerHTML = '<p class="placeholder-text">No notable matchups — all types deal normal damage (1×).</p>';
+  }
+}
