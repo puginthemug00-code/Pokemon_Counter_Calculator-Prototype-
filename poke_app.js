@@ -52,25 +52,7 @@ function getMultiplier(attackerType, defenderType) {
   return chart[defenderType] !== undefined ? chart[defenderType] : 1;
 }
 
-// given the attacker's types, calculate which defending types fall into each effectiveness category
-function calcOffense(attackerTypes) {
-  var groups = { 0: [], 0.25: [], 0.5: [], 1: [], 2: [], 4: [] };
 
-  ALL_TYPES.forEach(function(defender) {
-    var total = 1;
-    attackerTypes.forEach(function(attacker) {
-      total *= getMultiplier(attacker, defender);
-    });
-
-    if (groups[total] !== undefined) {
-      groups[total].push(defender);
-    } else {
-      groups[1].push(defender);
-    }
-  });
-
-  return groups;
-}
 
 // given the defender's types, calculate which attacking types fall into each effectiveness category
 function calcDefense(defenderTypes) {
@@ -94,6 +76,25 @@ function calcDefense(defenderTypes) {
   return groups;
 }
 
+// given the attacker's types, calculate which defending types fall into each effectiveness category
+function calcOffense(attackerTypes) {
+  var groups = { 0: [], 0.25: [], 0.5: [], 1: [], 2: [], 4: [] };
+
+  ALL_TYPES.forEach(function(defender) {
+    var total = 1;
+    attackerTypes.forEach(function(attacker) {
+      total *= getMultiplier(attacker, defender);
+    });
+
+    if (groups[total] !== undefined) {
+      groups[total].push(defender);
+    } else {
+      groups[1].push(defender);
+    }
+  });
+
+  return groups;
+}
 
 
 // --- Rendering the page ---
@@ -140,29 +141,50 @@ function makeGroup(labelText, typeList) {
 function renderResults() {
   var panel = document.getElementById('results');
   panel.innerHTML = '';
- 
+
   if (selected.length === 0) {
     panel.innerHTML = '<p class="placeholder-text">Select a type above to see matchups.</p>';
     return;
   }
- 
-  var groups = calcDefense(selected);
- 
-  var sections = [
+
+  // --- Defensive matchups ---
+  var defGroups = calcDefense(selected);
+  var defSections = [
     { mult: 0,    label: 'Immune to — 0×' },
     { mult: 0.25, label: 'Resists strongly — ¼×' },
     { mult: 0.5,  label: 'Resists — ½×' },
     { mult: 2,    label: 'Weak to — 2×' },
     { mult: 4,    label: 'Very weak to — 4×' },
   ];
- 
-  var hasContent = false;
-  sections.forEach(function(s) {
-    var el = makeGroup(s.label, groups[s.mult]);
-    if (el) { panel.appendChild(el); hasContent = true; }
+
+  var defHeader = document.createElement('p');
+  defHeader.className = 'eff-group-label';
+  defHeader.textContent = '— Defending —';
+  panel.appendChild(defHeader);
+
+  defSections.forEach(function(s) {
+    var el = makeGroup(s.label, defGroups[s.mult]);
+    if (el) panel.appendChild(el);
   });
- 
-  if (!hasContent) {
-    panel.innerHTML = '<p class="placeholder-text">No notable matchups — all types deal normal damage (1×).</p>';
-  }
+
+  // --- Offensive matchups ---
+  var offGroups = calcOffense(selected);
+  var offSections = [
+    { mult: 4,    label: 'Hits for — 4×' },
+    { mult: 2,    label: 'Hits for — 2×' },
+    { mult: 0.5,  label: 'Hits for — ½×' },
+    { mult: 0.25, label: 'Hits for — ¼×' },
+    { mult: 0,    label: 'No effect on — 0×' },
+  ];
+
+  var offHeader = document.createElement('p');
+  offHeader.className = 'eff-group-label';
+  offHeader.textContent = '— Attacking —';
+  offHeader.style.marginTop = '1.2rem';
+  panel.appendChild(offHeader);
+
+  offSections.forEach(function(s) {
+    var el = makeGroup(s.label, offGroups[s.mult]);
+    if (el) panel.appendChild(el);
+  });
 }
