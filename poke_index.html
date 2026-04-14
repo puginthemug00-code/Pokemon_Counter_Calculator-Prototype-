@@ -9,7 +9,7 @@
  
     body {
       font-family: sans-serif;
-      background: #1a1a2e;
+      background: #172546;
       color: #e0e0e0;
       min-height: 100vh;
       padding: 2rem 1rem;
@@ -54,17 +54,17 @@
  
     /* app.js adds/removes this class when a type is clicked */
     .type-btn.selected {
-      border-color: #fff;
-      box-shadow: 0 0 0 3px rgba(255,255,255,0.25);
+      border-color: #ffffff;
+      box-shadow: 0 0 0 5px rgba(255, 255, 255, 0.25);
     }
  
     /* The results panel — app.js fills this in */
     #results {
       max-width: 700px;
       margin: 0 auto;
-      background: #16213e;
-      border: 1px solid #2a2a4a;
-      border-radius: 17px;
+      background: #2c2c42;
+      border: 1px solid #000000;
+      border-radius: 1px;
       padding: 1.5rem;
       min-height: 120px;
     }
@@ -103,19 +103,15 @@
   <h1>Pokémon Type Calculator</h1>
   <p class="subtitle">Click a type to see its matchups. Click a second type for dual-type.</p>
  
-  <!-- app.js will inject type buttons into this div -->
+ 
   <div id="type-grid"></div>
  
-  <!-- app.js will inject results into this div -->
+ 
   <div id="results">
     <p class="placeholder-text">Select a type above to see matchups.</p>
   </div>
  
-  <!--
-    Scripts go at the BOTTOM of body — this guarantees the divs
-    above already exist before app.js tries to find them.
-    Load order matters: types.js first, then app.js.
-  -->
+
   <script src="poke_type.js"></script>
   <script src="poke_app.js"></script>
  
